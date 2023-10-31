@@ -1,0 +1,12 @@
+.nav {
+  padding: $space-medium;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &__logo {
+    color: $blue-600;
+    font-size: $font-size-header-3;
+    line-height: $line-height-header-3;
+    font-weight: $black;
+  }
+}

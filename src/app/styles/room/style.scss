@@ -1,0 +1,19 @@
+@import "../variables.scss";
+@import "../mixins.scss";
+
+@import "./nickname-form.scss";
+
+.create-room {
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  -webkit-box-pack: center;
+  justify-content: center;
+  -webkit-box-align: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  background: $body-color;
+}

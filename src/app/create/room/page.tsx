@@ -1,7 +1,12 @@
-import React from "react";
+import NicknameForm from "../../components/room/nickname-form";
+import "../../styles/room/style.scss";
 
-const Room = () => {
-  return <div>Room</div>;
+const CreateRoom = () => {
+  return (
+    <main className="create-room">
+      <NicknameForm />
+    </main>
+  );
 };
 
-export default Room;
+export default CreateRoom;

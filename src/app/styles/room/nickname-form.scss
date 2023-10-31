@@ -1,0 +1,50 @@
+.nickname-form {
+  width: 384px;
+  padding: $space-xlarge $space-small;
+  max-width: 90%;
+  background-color: $gray-100;
+  border-radius: $radius-large;
+  &__title {
+    color: $blue-700;
+    font-size: $font-size-header-3;
+    line-height: $line-height-header-3;
+    font-weight: $semibold;
+    margin-bottom: $space-xlarge;
+  }
+  &__action-wrapper {
+  }
+  &__label {
+    color: $blue-900;
+    font-weight: $regular;
+    font-size: $font-size-paragraph-3;
+    line-height: $line-height-paragraph-3;
+  }
+  &__input {
+    padding: $space-small $space-large;
+    margin-top: $space-small;
+    border: 1px solid $gray-400;
+    border-radius: $radius-small;
+    font-size: $font-size-paragraph-4;
+    line-height: $line-height-paragraph-4;
+    font-weight: $regular;
+  }
+  &__input:focus{
+    outline: none;
+  }
+  &__button {
+    display: inline-block;
+    margin-top: $space-xxlarge;
+    padding: $space-small;
+    color: $blue-900;
+    background-color: $yellow-500;
+    font-size: $font-size-paragraph-2;
+    line-height: $line-height-paragraph-2;
+    font-weight: $medium;
+    border-radius: $radius-small;
+    border: none;
+  }
+  &__button:hover {
+    background-color: $yellow-400;
+    cursor: pointer;
+  }
+}

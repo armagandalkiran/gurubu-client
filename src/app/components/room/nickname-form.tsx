@@ -1,6 +1,7 @@
 "use client";
 
 import { SetStateAction, useEffect, useRef, useState } from "react";
+import { RoomService } from "../../services/roomService";
 
 const defaultNickname = () => {
   return (
@@ -14,6 +15,8 @@ const NicknameForm = () => {
   const [nickname, setNickname] = useState(defaultNickname);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const roomService = new RoomService("http://localhost:5000");
+
   const handleNicknameChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
@@ -21,8 +24,11 @@ const NicknameForm = () => {
   };
 
   const handleNickNameButtonClick = () => {
-    if (nickname.trim() !== "") {
-      localStorage.setItem("nickname", nickname.trim());
+    const trimmedNickName = nickname.trim();
+    if (trimmedNickName !== "") {
+      localStorage.setItem("nickname", trimmedNickName);
+      const payload = { nickName: trimmedNickName };
+      const response = roomService.createRoom(payload);
     }
   };
 
@@ -30,7 +36,7 @@ const NicknameForm = () => {
     if (!inputRef.current) {
       return;
     }
-    
+
     inputRef.current.focus();
 
     inputRef.current.setSelectionRange(

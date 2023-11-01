@@ -2,6 +2,8 @@
 @import "../mixins.scss";
 
 @import "./nickname-form.scss";
+@import "./connecting-info.scss";
+@import "./not-found.scss";
 
 .create-room {
   position: absolute;
@@ -16,4 +18,10 @@
   flex-direction: column;
   text-align: center;
   background: $body-color;
+}
+
+.grooming-room {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }

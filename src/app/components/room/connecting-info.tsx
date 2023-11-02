@@ -2,15 +2,15 @@ import { useEffect, useState } from "react";
 import { notFound } from "next/navigation";
 import { RoomService } from "../../services/roomService";
 import { ROOM_STATUS } from "../../room/[id]/enums";
+import { useGroomingRoom } from "../../contexts/GroomingRoomContext";
 
 interface IProps {
   roomId: string;
 }
 
 const ConnectingInfo = ({ roomId }: IProps) => {
-  const [roomStatus, setRoomStatus] = useState<keyof typeof ROOM_STATUS>(
-    ROOM_STATUS.CHECKING
-  );
+  const { roomStatus, setRoomStatus } = useGroomingRoom();
+
   const roomService = new RoomService("http://localhost:5000");
 
   const fetchRoomId = async () => {

@@ -1,0 +1,23 @@
+.grooming-board {
+  height: 100vh;
+  display: flex;
+  padding: 0 $space-xxxlarge;
+  align-items: center;
+  justify-content: space-between;
+  &__playground {
+    width: 70%;
+    height: 80%;
+    border: 1px solid $gray-200;
+    border-radius: $radius-medium;
+    padding: $space-large;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+  }
+  &__logs-section {
+    width: 25%;
+    height: 80%;
+    border: 1px solid $gray-200;
+  }
+}

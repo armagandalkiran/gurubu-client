@@ -1,4 +1,5 @@
 import axios from "axios";
+import { HTTP_STATUS } from "../shared/enums";
 
 export class RoomService {
   baseUrl: string;
@@ -12,9 +13,11 @@ export class RoomService {
 
     try {
       const response = await axios.post(url, payload);
-      return { isSuccess: true };
+      if (response.status === HTTP_STATUS.CREATED) return response.data;
+
+      return null;
     } catch (e) {
-      return { isSuccess: false };
+      return null;
     }
   }
 
@@ -27,8 +30,24 @@ export class RoomService {
       return { isSuccess: false };
     }
   }
+
+  async join(id: string, payload: joinRoomPayload) {
+    const url = `${this.baseUrl}/room/${id}`;
+    try {
+      const response = await axios.post(url, payload);
+      if (response.status === HTTP_STATUS.OK) return response.data;
+      
+      return null;
+    } catch (e) {
+      return null;
+    }
+  }
 }
 
 interface CreateRoomPayload {
+  nickName: string;
+}
+
+interface joinRoomPayload {
   nickName: string;
 }

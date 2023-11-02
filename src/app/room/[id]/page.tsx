@@ -1,14 +1,34 @@
 "use client";
-import { useEffect } from "react";
-import { notFound } from "next/navigation";
+import { useState } from "react";
 import ConnectingInfo from "../../components/room/connecting-info";
+import GroomingBoard from "../../components/room/grooming-board";
+import NicknameForm from "../../components/room/nickname-form";
+import { SocketProvider } from "../../contexts/SocketContext";
+import { GroomingRoomProvider } from "../../contexts/GroomingRoomContext";
+import classnames from "classnames";
 import "../../styles/room/style.scss";
 
 const GroomingRoom = ({ params }: { params: { id: string } }) => {
+  const [showNickNameForm, setShowNickNameForm] = useState(false);
+
   return (
-    <main className="grooming-room">
-      <ConnectingInfo roomId={params.id} />
-    </main>
+    <GroomingRoomProvider roomId={params.id}>
+      <SocketProvider>
+        <main
+          className={classnames("grooming-room", {
+            "nickname-form-active": showNickNameForm,
+          })}
+        >
+          <ConnectingInfo roomId={params.id} />
+          <GroomingBoard
+            roomId={params.id}
+            showNickNameForm={showNickNameForm}
+            setShowNickNameForm={setShowNickNameForm}
+          />
+          {showNickNameForm && <NicknameForm joinMode={true} roomId={params.id} />}
+        </main>
+      </SocketProvider>
+    </GroomingRoomProvider>
   );
 };
 

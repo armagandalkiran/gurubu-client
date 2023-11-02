@@ -3,6 +3,11 @@
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { RoomService } from "../../services/roomService";
 
+interface IProps {
+  joinMode?: boolean;
+  roomId?: string;
+}
+
 const defaultNickname = () => {
   return (
     (typeof window !== "undefined" &&
@@ -11,7 +16,7 @@ const defaultNickname = () => {
   );
 };
 
-const NicknameForm = () => {
+const NicknameForm = ({ joinMode, roomId }: IProps) => {
   const [nickname, setNickname] = useState(defaultNickname);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -23,13 +28,70 @@ const NicknameForm = () => {
     setNickname(e.target.value);
   };
 
-  const handleNickNameButtonClick = () => {
+  const handleCreateRoomButtonClick = async () => {
     const trimmedNickName = nickname.trim();
-    if (trimmedNickName !== "") {
-      localStorage.setItem("nickname", trimmedNickName);
-      const payload = { nickName: trimmedNickName };
-      const response = roomService.createRoom(payload);
+    if (trimmedNickName === "") {
+      return;
     }
+    localStorage.setItem("nickname", trimmedNickName);
+    const payload = { nickName: trimmedNickName };
+    const response = await roomService.createRoom(payload);
+
+    if (!response) {
+      return;
+    }
+
+    let lobby = JSON.parse(localStorage.getItem("lobby") || "{}");
+
+    if (!Object.keys(lobby).length) {
+      const lobbyContent = {
+        state: {
+          rooms: {
+            [response.roomID]: response,
+          },
+        },
+      };
+      lobby = lobbyContent;
+      localStorage.setItem("lobby", JSON.stringify(lobbyContent));
+    }
+
+    lobby.state.rooms[response.roomID] = response;
+    localStorage.setItem("lobby", JSON.stringify(lobby));
+
+    window.location.assign(`/room/${response.roomID}`);
+  };
+
+  const handleJoinRoomButtonClick = async () => {
+    const trimmedNickName = nickname.trim();
+    if (trimmedNickName === "" || !roomId) {
+      return;
+    }
+    localStorage.setItem("nickname", trimmedNickName);
+    const payload = { nickName: trimmedNickName };
+    const response = await roomService.join(roomId, payload);
+
+    if (!response) {
+      return;
+    }
+
+    let lobby = JSON.parse(localStorage.getItem("lobby") || "{}");
+
+    if (!Object.keys(lobby).length) {
+      const lobbyContent = {
+        state: {
+          rooms: {
+            [response.roomID]: response,
+          },
+        },
+      };
+      lobby = lobbyContent;
+      localStorage.setItem("lobby", JSON.stringify(lobbyContent));
+    }
+
+    lobby.state.rooms[response.roomID] = response;
+    localStorage.setItem("lobby", JSON.stringify(lobby));
+
+    window.location.assign(`/room/${response.roomID}`);
   };
 
   useEffect(() => {
@@ -64,9 +126,11 @@ const NicknameForm = () => {
         </div>
         <button
           className="nickname-form__button"
-          onClick={handleNickNameButtonClick}
+          onClick={
+            joinMode ? handleJoinRoomButtonClick : handleCreateRoomButtonClick
+          }
         >
-          Create Room
+          {joinMode ? "Join Room" : "Create Room"}
         </button>
       </div>
     </div>

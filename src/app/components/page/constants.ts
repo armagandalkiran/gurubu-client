@@ -13,7 +13,7 @@ export const HOW_TO_ITEMS = [
   },
   {
     id: 4,
-    text: "Share the room URL with your colleagues",
+    text: "Share the room URL with your colleagues.",
   },
   {
     id: 5,

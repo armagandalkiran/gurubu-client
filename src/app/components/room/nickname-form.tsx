@@ -2,6 +2,8 @@
 
 import { SetStateAction, useEffect, useRef, useState } from "react";
 import { RoomService } from "../../services/roomService";
+import Image from "next/image";
+import classNames from "classnames";
 
 interface IProps {
   joinMode?: boolean;
@@ -18,8 +20,11 @@ const defaultNickname = () => {
 
 const NicknameForm = ({ joinMode, roomId }: IProps) => {
   const [nickname, setNickname] = useState(defaultNickname);
+  const [groomingType, setGroomingType] = useState<null | string>(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef<HTMLInputElement | null>(null);
 
+  const isPlanningOptionSelected = groomingType === "0";
   const roomService = new RoomService("http://localhost:5000");
 
   const handleNicknameChange = (e: {
@@ -29,12 +34,16 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
   };
 
   const handleCreateRoomButtonClick = async () => {
+    if (groomingType === null) {
+      setErrorMessage("Please select a grooming type.");
+      return;
+    }
     const trimmedNickName = nickname.trim();
     if (trimmedNickName === "") {
       return;
     }
     localStorage.setItem("nickname", trimmedNickName);
-    const payload = { nickName: trimmedNickName };
+    const payload = { nickName: trimmedNickName, groomingType };
     const response = await roomService.createRoom(payload);
 
     if (!response) {
@@ -94,6 +103,11 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
     window.location.assign(`/room/${response.roomID}`);
   };
 
+  const handleOptionClick = (typeNumber: string) => {
+    setErrorMessage("");
+    setGroomingType(typeNumber);
+  };
+
   useEffect(() => {
     if (!inputRef.current) {
       return;
@@ -124,6 +138,48 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
             onChange={handleNicknameChange}
           />
         </div>
+        {!joinMode && (
+          <label className="nickname-form__label">
+            And select a grooming type.
+          </label>
+        )}
+        {!joinMode && (
+          <div className="nickname-form__grooming-options">
+            <div
+              className={classNames("nickname-form__grooming-option", {
+                selected: isPlanningOptionSelected,
+              })}
+              onClick={() => handleOptionClick("0")}
+            >
+              <Image
+                priority
+                src="/planning.svg"
+                alt="planning"
+                width={100}
+                height={100}
+              />
+              <p>Planning Poker</p>
+            </div>
+            <div
+              className={classNames("nickname-form__grooming-option", {
+                selected: !isPlanningOptionSelected && groomingType !== null,
+              })}
+              onClick={() => handleOptionClick("1")}
+            >
+              <Image
+                priority
+                src="/gamepad.svg"
+                alt="hammer"
+                width={100}
+                height={100}
+              />
+              <p>Tech Grooming</p>
+            </div>
+          </div>
+        )}
+        {errorMessage && (
+          <p className="nickname-form__error-message">{errorMessage}</p>
+        )}
         <button
           className="nickname-form__button"
           onClick={

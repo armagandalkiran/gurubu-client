@@ -3,6 +3,7 @@ import { useState } from "react";
 import ConnectingInfo from "../../components/room/connecting-info";
 import GroomingBoard from "../../components/room/grooming-board";
 import NicknameForm from "../../components/room/nickname-form";
+import GroomingNavbar from "../../components/room/grooming-navbar";
 import { SocketProvider } from "../../contexts/SocketContext";
 import { GroomingRoomProvider } from "../../contexts/GroomingRoomContext";
 import classnames from "classnames";
@@ -20,12 +21,15 @@ const GroomingRoom = ({ params }: { params: { id: string } }) => {
           })}
         >
           <ConnectingInfo roomId={params.id} />
+          <GroomingNavbar showNickNameForm={showNickNameForm} />
           <GroomingBoard
             roomId={params.id}
             showNickNameForm={showNickNameForm}
             setShowNickNameForm={setShowNickNameForm}
           />
-          {showNickNameForm && <NicknameForm joinMode={true} roomId={params.id} />}
+          {showNickNameForm && (
+            <NicknameForm joinMode={true} roomId={params.id} />
+          )}
         </main>
       </SocketProvider>
     </GroomingRoomProvider>

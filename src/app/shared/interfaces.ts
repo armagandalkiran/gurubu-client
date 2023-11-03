@@ -1,9 +1,14 @@
+export interface Votes {
+  [key: string]: string;
+}
 export interface User {
-  userID: number,
-  credentials: string,
-  nickname: string,
-  roomID: string,
-  sockets: string[]
+  userID: number;
+  credentials: string;
+  nickname: string;
+  roomID: string;
+  sockets: string[];
+  votes: Votes;
+  isAdmin: boolean;
 }
 
 export interface Metric {
@@ -23,6 +28,8 @@ export interface GroomingInfo {
   metrics: Metric[];
   score: number;
   status: string;
+  isAdmin: boolean;
+  isResultShown: boolean;
 }
 
 export interface UserInfo {
@@ -33,6 +40,7 @@ export interface UserInfo {
     userID: string;
     createdAt: string;
     expiredAt: string;
+    isAdmin: boolean;
   };
 }
 

@@ -1,12 +1,13 @@
 @import "../variables.scss";
 @import "../mixins.scss";
 
-@import "./nickname-form.scss";
-@import "./connecting-info.scss";
 @import "./not-found.scss";
-@import "./grooming-board.scss";
 @import "./vote-card.scss";
 @import "./voting-stick.scss";
+@import "./nickname-form.scss";
+@import "./grooming-board.scss";
+@import "./connecting-info.scss";
+@import "./grooming-navbar.scss";
 
 .create-room {
   position: absolute;
@@ -24,7 +25,7 @@
 }
 
 .grooming-room {
-  min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   overflow-y: hidden;

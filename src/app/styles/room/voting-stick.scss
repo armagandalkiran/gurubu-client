@@ -3,7 +3,8 @@
   align-items: center;
   justify-content: center;
   gap: 0 $space-xlarge;
-  &__vote-cards{
+  &__vote-cards {
+    width: 500px;
     display: flex;
     align-items: center;
     justify-content: center;

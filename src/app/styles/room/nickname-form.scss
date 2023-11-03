@@ -1,6 +1,6 @@
 .nickname-form {
   width: 384px;
-  padding: $space-xlarge $space-small;
+  padding: $space-xlarge $space-medium;
   max-width: 90%;
   background-color: $gray-100;
   border-radius: $radius-large;
@@ -11,7 +11,11 @@
     font-weight: $semibold;
     margin-bottom: $space-xlarge;
   }
-  &__action-wrapper {
+  &__input-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
   }
   &__label {
     color: $blue-900;
@@ -21,15 +25,54 @@
   }
   &__input {
     padding: $space-small $space-large;
-    margin-top: $space-small;
+    margin: $space-large 0;
     border: 1px solid $gray-400;
     border-radius: $radius-small;
     font-size: $font-size-paragraph-4;
     line-height: $line-height-paragraph-4;
     font-weight: $regular;
   }
-  &__input:focus{
+  &__input:focus {
     outline: none;
+  }
+  &__grooming-options {
+    margin-top: $space-xlarge;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0 $space-xxxlarge;
+  }
+  &__grooming-option {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;   
+    color: $blue-900;
+    padding: $space-large;
+    border: 2px solid $gray-200;
+    width: 150px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: $radius-small;
+    flex-direction: column;
+    font-size: $font-size-paragraph-4;
+    line-height: $line-height-paragraph-4;
+    font-weight: $medium;
+    background: $body-color;
+    &.selected {
+      border: 2px solid $yellow-500;
+    }
+  }
+  &__grooming-option:hover {
+    cursor: pointer;
+  }
+  &__error-message {
+    margin-top: $space-large;
+    font-size: $font-size-paragraph-4;
+    line-height: $line-height-paragraph-4;
+    font-weight: $regular;
+    color: $red-700;
   }
   &__button {
     display: inline-block;
@@ -42,6 +85,7 @@
     font-weight: $medium;
     border-radius: $radius-small;
     border: none;
+    min-width: 150px;
   }
   &__button:hover {
     background-color: $yellow-400;

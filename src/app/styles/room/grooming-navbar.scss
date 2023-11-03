@@ -1,0 +1,22 @@
+.grooming-navbar {
+  width: 100%;
+  padding: $space-large $space-xxxlarge;
+  display: flex;
+  justify-content: space-between;
+  position: absolute;
+  &__participants{
+    min-width: 160px;
+    background: $blue-400;
+    border-radius: $radius-medium;
+    display: flex;
+    align-items: center;
+    color: $gray-100;
+    padding: $space-small $space-medium;
+    gap: 0 $space-medium;
+  }
+  &__participant-number{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}

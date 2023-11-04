@@ -22,7 +22,7 @@ const GroomingNavbar = ({ showNickNameForm }: IProps) => {
           <p>{groomingInfo.totalParticipants || "0"}</p>
         </div>
       </div>
-      <div>test</div>
+      <div className="grooming-navbar__project-version">0.9.1 Beta</div>
     </nav>
   );
 };

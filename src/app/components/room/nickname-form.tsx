@@ -30,7 +30,9 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
   const handleNicknameChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
-    setNickname(e.target.value);
+    if(e.target.value.length < 17){
+      setNickname((e.target.value as string).trim());
+    }
   };
 
   const handleCreateRoomButtonClick = async () => {

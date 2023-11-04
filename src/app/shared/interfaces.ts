@@ -21,12 +21,21 @@ export interface Participants {
   [key: string]: User;
 }
 
+export interface MetricAverages {
+  [key: string]: {
+    average: number;
+    missingVotes: number;
+    total: number;
+  };
+}
+
 export interface GroomingInfo {
   totalParticipants: number;
   mode: string;
   participants: Participants;
   metrics: Metric[];
   score: number;
+  metricAverages: MetricAverages;
   status: string;
   isAdmin: boolean;
   isResultShown: boolean;

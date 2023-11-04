@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useSocket } from "../../contexts/SocketContext";
 import {
   checkUserJoinedLobbyBefore,
@@ -8,6 +8,9 @@ import { useGroomingRoom } from "../../contexts/GroomingRoomContext";
 import VotingStick from "./voting-stick";
 import classNames from "classnames";
 import Image from "next/image";
+import { IconCheck } from "@tabler/icons-react";
+import MetricAverages from "./metric-averages";
+import GroomingBoardParticipants from "./grooming-board-participants";
 
 interface IProps {
   roomId: string;
@@ -23,7 +26,6 @@ const GroomingBoard = ({
   const socket = useSocket();
   const { userInfo, setGroomingInfo, groomingInfo, setUserVote } =
     useGroomingRoom();
-  const [isResultsShown, setIsResultsShown] = useState(false);
 
   useEffect(() => {
     if (!checkUserJoinedLobbyBefore(roomId)) {
@@ -57,7 +59,7 @@ const GroomingBoard = ({
       setGroomingInfo(data);
     });
 
-    socket.on("userDisconnected", (data) => {});
+    socket.on("userDisconnected", (data) => setGroomingInfo(data));
 
     socket.on("welcomeMessage", (message) => {});
   }, []);
@@ -76,8 +78,6 @@ const GroomingBoard = ({
   if (showNickNameForm) {
     return null;
   }
-
-  console.log(groomingInfo);
 
   return (
     <div className="grooming-board">
@@ -100,6 +100,7 @@ const GroomingBoard = ({
             ))}
           </div>
         )}
+        <MetricAverages />
         {userInfo.lobby?.isAdmin && (
           <div className="grooming-board__actions-wrapper">
             <button
@@ -126,31 +127,7 @@ const GroomingBoard = ({
               <li key={metric.id}>{metric.name}</li>
             ))}
           </ul>
-          <ul className="grooming-board__participants-container">
-            {Object.keys(groomingInfo.participants || {}).map(
-              (participantKey) => (
-                <li key={participantKey}>
-                  <label>
-                    {groomingInfo.participants[participantKey].nickname}
-                  </label>
-                  <div>
-                    {groomingInfo.metrics.map(
-                      (metric) =>
-                        groomingInfo.participants[participantKey].votes && (
-                          <p key={metric.id}>
-                            {
-                              groomingInfo.participants[participantKey].votes[
-                                metric.name
-                              ]
-                            }
-                          </p>
-                        )
-                    )}
-                  </div>
-                </li>
-              )
-            )}
-          </ul>
+          <GroomingBoardParticipants />
         </>
       </section>
     </div>

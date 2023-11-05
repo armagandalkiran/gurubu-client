@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useSocket } from "../../contexts/SocketContext";
 import {
   checkUserJoinedLobbyBefore,
@@ -8,9 +8,9 @@ import { useGroomingRoom } from "../../contexts/GroomingRoomContext";
 import VotingStick from "./voting-stick";
 import classNames from "classnames";
 import Image from "next/image";
-import { IconCheck } from "@tabler/icons-react";
 import MetricAverages from "./metric-averages";
 import GroomingBoardParticipants from "./grooming-board-participants";
+import { IconEdit, IconReportAnalytics } from "@tabler/icons-react";
 
 interface IProps {
   roomId: string;
@@ -24,8 +24,11 @@ const GroomingBoard = ({
   setShowNickNameForm,
 }: IProps) => {
   const socket = useSocket();
+  const [editVoteClicked, setEditVoteClicked] = useState(false);
   const { userInfo, setGroomingInfo, groomingInfo, setUserVote } =
     useGroomingRoom();
+
+  const isGroomingInfoLoaded = Boolean(Object.keys(groomingInfo).length);
 
   useEffect(() => {
     if (!checkUserJoinedLobbyBefore(roomId)) {
@@ -57,6 +60,7 @@ const GroomingBoard = ({
     socket.on("resetVotes", (data) => {
       setUserVote({});
       setGroomingInfo(data);
+      setEditVoteClicked(false);
     });
 
     socket.on("userDisconnected", (data) => setGroomingInfo(data));
@@ -75,6 +79,14 @@ const GroomingBoard = ({
     socket.emit("resetVotes", roomId);
   };
 
+  const handleEditButtonClick = () => {
+    setEditVoteClicked(!editVoteClicked);
+  };
+
+  const renderLoading = () => {
+    return <div className="grooming-board__loading">Loading..</div>;
+  };
+
   if (showNickNameForm) {
     return null;
   }
@@ -82,26 +94,52 @@ const GroomingBoard = ({
   return (
     <div className="grooming-board">
       <section className="grooming-board__playground">
-        {groomingInfo.isResultShown && (
-          <div className="grooming-board__results">
-            <Image src="/trophy.svg" alt="trophy" width={200} height={200} />
-            <p>{groomingInfo.score}</p>
-          </div>
-        )}
-        {!groomingInfo.isResultShown && (
-          <div className="grooming-board__voting-sticks">
-            {groomingInfo.metrics?.map((metric) => (
-              <VotingStick
-                key={metric.id}
-                id={metric.id}
-                points={metric.points}
-                name={metric.name}
+        {!editVoteClicked &&
+          groomingInfo.isResultShown &&
+          isGroomingInfoLoaded && (
+            <div className="grooming-board__results">
+              <Image
+                priority
+                src="/trophy.svg"
+                alt="trophy"
+                width={200}
+                height={200}
               />
-            ))}
+              <p>{groomingInfo.score}</p>
+            </div>
+          )}
+        {(editVoteClicked || !groomingInfo.isResultShown) &&
+          isGroomingInfoLoaded && (
+            <div className="grooming-board__voting-sticks">
+              {groomingInfo.metrics?.map((metric) => (
+                <VotingStick
+                  key={metric.id}
+                  id={metric.id}
+                  points={metric.points}
+                  name={metric.name}
+                />
+              ))}
+            </div>
+          )}
+        {!editVoteClicked && <MetricAverages />}
+        {groomingInfo.isResultShown && (
+          <div className="grooming-board__toggle-button-wrapper">
+            <button
+              className={classNames("grooming-board__edit-vote-toggle-button", {
+                clicked: editVoteClicked,
+              })}
+              onClick={handleEditButtonClick}
+            >
+              {editVoteClicked ? "Back to Results" : "Edit Vote"}
+              {editVoteClicked ? (
+                <IconReportAnalytics width={16} />
+              ) : (
+                <IconEdit width={16} />
+              )}
+            </button>
           </div>
         )}
-        <MetricAverages />
-        {userInfo.lobby?.isAdmin && (
+        {userInfo.lobby?.isAdmin && isGroomingInfoLoaded && (
           <div className="grooming-board__actions-wrapper">
             <button
               className="grooming-board__reset-votes-button"
@@ -119,15 +157,21 @@ const GroomingBoard = ({
             </button>
           </div>
         )}
+        {!isGroomingInfoLoaded && renderLoading()}
       </section>
       <section className="grooming-board__logs-section">
         <>
-          <ul className="grooming-board__metrics">
-            {groomingInfo.metrics?.map((metric) => (
-              <li key={metric.id}>{metric.name}</li>
-            ))}
-          </ul>
-          <GroomingBoardParticipants />
+          {isGroomingInfoLoaded && (
+            <>
+              <ul className="grooming-board__metrics">
+                {groomingInfo.metrics?.map((metric) => (
+                  <li key={metric.id}>{metric.name}</li>
+                ))}
+              </ul>
+              <GroomingBoardParticipants />
+            </>
+          )}
+          {!isGroomingInfoLoaded && renderLoading()}
         </>
       </section>
     </div>

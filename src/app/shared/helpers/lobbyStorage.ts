@@ -16,6 +16,7 @@ export const checkUserJoinedLobbyBefore = (roomId: string) => {
 };
 
 export const getCurrentLobby = (roomId: string) => {
+  clearExpiredRooms();
   if (typeof window !== "undefined") {
     const lobby = JSON.parse(localStorage.getItem("lobby") || "{}");
     if (!Object.keys(lobby).length) {
@@ -25,3 +26,21 @@ export const getCurrentLobby = (roomId: string) => {
     return lobby.state.rooms[roomId];
   }
 };
+
+function clearExpiredRooms() {
+  const currentTime = new Date().getTime();
+  if (typeof window !== "undefined") {
+    const lobby = JSON.parse(localStorage.getItem("lobby") || "{}");
+    if (!Object.keys(lobby).length) {
+      return null;
+    }
+
+    Object.keys(lobby.state.rooms).forEach((roomKey) => {
+      if (lobby.state.rooms[roomKey].expiredAt < currentTime) {
+        delete lobby.state.rooms[roomKey];
+      }
+    });
+
+    localStorage.setItem("lobby", JSON.stringify(lobby));
+  }
+}

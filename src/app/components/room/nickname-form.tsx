@@ -22,6 +22,7 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
   const [nickname, setNickname] = useState(defaultNickname);
   const [groomingType, setGroomingType] = useState<null | string>(null);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showInfoMessage, setShowInfoMessage] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const isPlanningOptionSelected = groomingType === "0";
@@ -36,6 +37,7 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
   };
 
   const handleCreateRoomButtonClick = async () => {
+    setShowInfoMessage(true);
     if (groomingType === null) {
       setErrorMessage("Please select a grooming type.");
       return;
@@ -73,6 +75,7 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
   };
 
   const handleJoinRoomButtonClick = async () => {
+    setShowInfoMessage(true);
     const trimmedNickName = nickname.trim();
     if (trimmedNickName === "" || !roomId) {
       return;
@@ -190,6 +193,9 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
         >
           {joinMode ? "Join Room" : "Create Room"}
         </button>
+        {showInfoMessage && (
+          <p className="nickname-form__info-message">{joinMode ? "Joining Room..." : "Creating Room..."}</p>
+        )}
       </div>
     </div>
   );

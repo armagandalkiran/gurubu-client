@@ -91,4 +91,11 @@
     background-color: $yellow-400;
     cursor: pointer;
   }
+  &__info-message{
+    margin-top: $space-large;
+    font-size: $font-size-paragraph-4;
+    line-height: $line-height-paragraph-4;
+    font-weight: $semibold;
+    color: $gray-800;
+  }
 }

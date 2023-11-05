@@ -11,6 +11,7 @@ import Image from "next/image";
 import MetricAverages from "./metric-averages";
 import GroomingBoardParticipants from "./grooming-board-participants";
 import { IconEdit, IconReportAnalytics } from "@tabler/icons-react";
+import { ROOM_STATUS } from "../../room/[id]/enums";
 
 interface IProps {
   roomId: string;
@@ -25,14 +26,16 @@ const GroomingBoard = ({
 }: IProps) => {
   const socket = useSocket();
   const [editVoteClicked, setEditVoteClicked] = useState(false);
-  const { userInfo, setGroomingInfo, groomingInfo, setUserVote } =
+  const { userInfo, setGroomingInfo, groomingInfo, setUserVote, roomStatus } =
     useGroomingRoom();
 
   const isGroomingInfoLoaded = Boolean(Object.keys(groomingInfo).length);
 
   useEffect(() => {
     if (!checkUserJoinedLobbyBefore(roomId)) {
-      setShowNickNameForm(true);
+      if (roomStatus === ROOM_STATUS.FOUND) {
+        setShowNickNameForm(true);
+      }
       return;
     }
     const nickname = localStorage.getItem("nickname");
@@ -66,7 +69,7 @@ const GroomingBoard = ({
     socket.on("userDisconnected", (data) => setGroomingInfo(data));
 
     socket.on("welcomeMessage", (message) => {});
-  }, []);
+  }, [roomStatus]);
 
   const handleShowResultsClick = () => {
     if (groomingInfo.isResultShown) {

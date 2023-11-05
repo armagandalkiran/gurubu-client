@@ -3,7 +3,9 @@ import io from "socket.io-client";
 import { useGroomingRoom } from "./GroomingRoomContext";
 import { ROOM_STATUS } from "../../app/room/[id]/enums";
 
-const socket = io("http://localhost:5000", { autoConnect: false });
+const socket = io(process.env.NEXT_PUBLIC_API_URL || "", {
+  autoConnect: false,
+});
 const SocketContext = createContext(socket);
 
 export function useSocket() {

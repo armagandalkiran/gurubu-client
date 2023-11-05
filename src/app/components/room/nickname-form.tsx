@@ -25,12 +25,12 @@ const NicknameForm = ({ joinMode, roomId }: IProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const isPlanningOptionSelected = groomingType === "0";
-  const roomService = new RoomService("http://localhost:5000");
+  const roomService = new RoomService(process.env.NEXT_PUBLIC_API_URL || "");
 
   const handleNicknameChange = (e: {
     target: { value: SetStateAction<string> };
   }) => {
-    if(e.target.value.length < 17){
+    if (e.target.value.length < 17) {
       setNickname((e.target.value as string).trim());
     }
   };

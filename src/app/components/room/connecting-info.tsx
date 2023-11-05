@@ -11,7 +11,7 @@ interface IProps {
 const ConnectingInfo = ({ roomId }: IProps) => {
   const { roomStatus, setRoomStatus } = useGroomingRoom();
 
-  const roomService = new RoomService("http://localhost:5000");
+  const roomService = new RoomService(process.env.NEXT_PUBLIC_API_URL || "");
 
   const fetchRoomId = async () => {
     const response = await roomService.getRoom(roomId);

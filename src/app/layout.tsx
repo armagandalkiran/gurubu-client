@@ -5,7 +5,7 @@ import "./styles/globals.scss";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Gurubu",
+  title: "Gurubu | Simple, fast and practical grooming",
   description: "Simple, fast and practical grooming.",
 };
 
@@ -16,6 +16,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="gamepad.svg" type="image/x-icon" sizes="7x10" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   );
